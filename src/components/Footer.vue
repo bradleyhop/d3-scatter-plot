@@ -23,7 +23,7 @@ export default {
       </a>
         &#169;{{ currentYear }}
       <a
-        href="https://github.com/bradleyhop/d3-bar-chart"
+        href="https://github.com/bradleyhop/d3-scatter-plot"
         rel="noopener"
         target="_blank"
         class="footer-link"
@@ -36,18 +36,18 @@ export default {
 
 <style scoped lang="scss">
 .footer-content {
-  height: 2.5rem;
-  padding: 0.5rem;
-  margin: 0;
   color: $text-gray;
+  height: 2.5rem;
+  margin: 0;
+  padding: 0.5rem;
   text-align: left;
 }
 
 .footer-copy {
   float: right;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
   line-height: 1.2rem;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
 }
 
 .footer-link {

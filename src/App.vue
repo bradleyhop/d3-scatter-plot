@@ -40,15 +40,15 @@ export default {
 }
 
 #app {
+  color: $text-gray;
   display: flex; // boilerplate to keep footer down below
-  height: 100vh; // needed to stick the footer to bottom
+  flex-direction: column; // footer at the bottom ;)
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   font-size: 16px;
-  color: $text-gray;
-  text-align: center;
-  flex-direction: column; // footer at the bottom ;)
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh; // needed to stick the footer to bottom
+  text-align: center;
 }
 
 .content {
