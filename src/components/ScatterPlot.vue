@@ -50,8 +50,8 @@ export default {
       // setup x-axis (time in min:sec format)
       const yScale = d3.scaleLinear()
         .domain(
-          Math.ceil(d3.min(this.cycleData, (d) => d.Seconds * 1000)),
-          Math.ceil(d3.max(this.cycleData, (d) => d.Seconds * 1000)),
+          d3.min(this.cycleData, (d) => d.Seconds),
+          d3.max(this.cycleData, (d) => d.Seconds),
         )
         .range([
           this.heightChart - this.padding,
@@ -59,9 +59,10 @@ export default {
         ]);
 
       // d3 methods for drawing x- & y-axis
-      const xAxis = d3.axisBottom(xScale);
+      const xAxis = d3.axisBottom(xScale)
+        .tickFormat(d3.format('d'));
       const yAxis = d3.axisLeft(yScale)
-        .tickFormat((d) => d3.timeFormat('%MS')(new Date(0).setSeconds(d.Seconds)));
+        .tickFormat(d3.timeFormat('%M:%S'));
 
       // draw x-axis
       svg.append('g')
