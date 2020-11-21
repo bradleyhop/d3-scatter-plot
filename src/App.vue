@@ -12,17 +12,19 @@ export default {
 </script>
 
 <template>
-  <div
-    class="content"
-    role="main"
-   >
-    <h1 class="project-title">Doping in Professional Bicyle Racing</h1>
-    <ScatterPlot />
-  </div>
+  <div id="app">
+    <div
+      class="content"
+      role="main"
+      >
+      <h1 class="project-title">Doping in Professional Bicyle Racing</h1>
+      <ScatterPlot />
+    </div>
 
-  <footer>
-    <Footer />
-  </footer>
+    <footer>
+      <Footer />
+    </footer>
+  </div>
 </template>
 
 <style lang="scss">
