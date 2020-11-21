@@ -9,7 +9,7 @@ export default {
       cycleData: undefined, // placeholder for fetch'ed gdp data
       widthChart: 1000, // width of svg area
       heightChart: 500, // height of svg area
-      padding: 65, // padding of chart
+      padding: 55, // padding of chart
     };
   },
 
@@ -18,17 +18,25 @@ export default {
     fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json')
       .then((response) => response.json())
       .then((data) => {
+        // store obj within vue
         this.cycleData = data;
+
+        // add Milliseconds property to represent milliseconds
+        //  as Date() object for d3 time formatting
+        this.cycleData.forEach((obj) => (
+          Object.assign(obj,
+            {
+              Milliseconds: new Date(obj.Seconds * 1000),
+            })
+        ));
       })
       .then(() => this.graphInit())
       .catch((error) => console.log(error));
   },
 
   methods: {
-    // called by mounted() after async data is fetch'ed
+    // called by mounted() after async data is successfully fetch'ed
     graphInit() {
-      console.log(this.cycleData);
-
       // choose element to put our svg element
       const svg = d3.select('#bar-chart')
         .append('svg')
@@ -48,14 +56,13 @@ export default {
         ]);
 
       // setup x-axis (time in min:sec format)
-      const yScale = d3.scaleLinear()
+      const yScale = d3.scaleTime()
         .domain(
-          d3.min(this.cycleData, (d) => d.Seconds),
-          d3.max(this.cycleData, (d) => d.Seconds),
+          d3.extent(this.cycleData, (d) => d.Milliseconds),
         )
         .range([
-          this.heightChart - this.padding,
           this.padding,
+          this.heightChart - this.padding,
         ]);
 
       // d3 methods for drawing x- & y-axis
@@ -82,24 +89,26 @@ export default {
         .enter()
         .append('circle')
         .attr('cx', (d) => xScale(d.Year))
-        .attr('cy', (d) => this.heightChart - yScale(d.Seconds))
+        .attr('cy', (d) => yScale(d.Milliseconds))
         .attr('data-xvalue', (d) => d.Year) // int or Date
-        .attr('data-yvalue', (d) => d3.timeFormat('%M:%S')(d.Seconds)) // use Date object
+        .attr('data-yvalue', (d) => d3.timeFormat('%M:%S')(d.Seconds * 1000)) // use Date object
         .attr('r', 5)
         .attr('class', 'dot') // class required for project
         // change circle color based on whether doped or not; coordinate with legend
-        .style('fill', (d) => (d.Doping !== '' ? 'green' : 'red'));
+        .style('fill', (d) => (d.Doping !== '' ? '#ef5350' : '#66bb6a'));
 
       // tooltips
-      svg.selectAll('text')
-        .data(this.cycleData)
-        .enter()
-        .append('text')
-        .attr('x', (d) => xScale(d.Year) + 5)
-        .attr('y', (d) => yScale(this.heightChart - yScale(d.Seconds)))
-        .attr('id', 'tooltip') // id required for project
-        .attr('class', 'tooltip')
-        .text('butts');
+      /*
+       * svg.selectAll('text')
+       *   .data(this.cycleData)
+       *   .enter()
+       *   .append('text')
+       *   .attr('x', (d) => xScale(d.Year) + 5)
+       *   .attr('y', (d) => yScale(d.Milliseconds))
+       *   .attr('id', 'tooltip') // id required for project
+       *   .attr('class', 'tooltip')
+       *   .text('butts');
+       */
     },
 
   },
@@ -109,7 +118,7 @@ export default {
 <template>
   <div class="container-bar-chart">
     <h2 id="title" class="chart-title">
-      Thrity-Five Fastest Times Up Alpe d'Huez
+      Thirty-Five Fastest Times Up Alpe d'Huez
     </h2>
     <div id="bar-chart" class="bar-chart">
     </div>
@@ -150,6 +159,16 @@ export default {
 
 .axis-label {
   font-size: 0.8rem;
+}
+
+// dynanmically assigned class for dots to show doping allegation status
+.doped {
+  fill: $guilty-red;
+}
+
+// dynanmically assigned class for dots to show doping allegation status
+.not-doped {
+  fill: $clean-green;
 }
 
 .tooltip {
