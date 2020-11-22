@@ -6,10 +6,21 @@ export default {
 
   data() {
     return {
-      cycleData: undefined, // placeholder for fetch'ed gdp data
+      cycleData: undefined, // placeholder for fetch'ed cyclist data
       widthChart: 1000, // width of svg area
       heightChart: 500, // height of svg area
-      padding: 55, // padding of chart
+      padding: 60, // padding of chart
+      // arry of objects for the grpah legend
+      legend: [
+        {
+          Text: 'Alled Doping',
+          Doping: 'Yes',
+        },
+        {
+          Text: 'No Doping',
+          Doping: '',
+        },
+      ],
     };
   },
 
@@ -36,7 +47,7 @@ export default {
   methods: {
     // called by mounted() after async data is successfully fetch'ed
     graphInit() {
-      // choose element to put our svg element
+      // choose element to draw our svg element
       const svg = d3.select('#scatter-plot')
         .append('svg')
         .attr('width', this.widthChart)
@@ -44,7 +55,7 @@ export default {
 
       // setup x-axis (year)
       const xScale = d3.scaleLinear()
-        // minus and plus one year to give padding to the circle
+        // minus and plus one year to give padding for the data
         .domain([
           d3.min(this.cycleData, (d) => d.Year - 1),
           d3.max(this.cycleData, (d) => d.Year + 1),
@@ -56,9 +67,10 @@ export default {
 
       // setup x-axis
       const yScale = d3.scaleTime()
-        .domain(
-          d3.extent(this.cycleData, (d) => d.DateObj),
-        )
+        .domain([
+          d3.min(this.cycleData, (d) => d.DateObj),
+          d3.max(this.cycleData, (d) => d.DateObj),
+        ])
         .range([
           this.padding,
           this.heightChart - this.padding,
@@ -123,6 +135,51 @@ export default {
             .style('opacity', 0)
             .style('display', 'none');
         });
+
+      // x-axis label
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .attr('text-anchor', 'end')
+        .attr('x', this.widthChart / 2)
+        .attr('y', this.heightChart - 22)
+        .text('Year');
+
+      // y-axis label
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .attr('text-anchor', 'end')
+        .attr('y', 10) // pushes text to the right
+        .attr('x', -130) // pushes text down
+        .attr('transform', 'rotate(-90)') // vertical text
+        .text('Time Completed (Minutes:Seconds)');
+
+      // one dot for each label in the legend
+      const legendDots = svg.selectAll('legendDots')
+        .data(this.legend)
+        .enter()
+        .append('rect')
+        .attr('x', this.widthChart - this.padding - 7) // color squares are to the left of text
+        .attr('y', (d, i) => 90 + (i * 25)) // multiple to set each dot lower than prev
+        .attr('height', 12)
+        .attr('width', 12)
+        .attr('class', (d) => (d.Doping ? 'doped' : 'not-doped'));
+
+      // text labels for legend
+      const legendText = svg.selectAll('legendText')
+        .data(this.legend)
+        .enter()
+        .append('text')
+        .attr('x', this.widthChart - this.padding - 100)
+        .attr('y', (d, i) => 100 + (i * 25))
+        .text((d) => d.Text)
+        .attr('class', 'legend-text');
+
+      // not sure if this is how to implement the #legend legend?
+      svg.append('g')
+        .attr('transform', 'translate(0, 0)')
+        .attr('id', 'legend') // requirement for project
+        .call(legendDots)
+        .call(legendText);
     },
 
   },
@@ -167,6 +224,7 @@ export default {
 
 .axis-label {
   font-size: 0.8rem;
+  font-style: italic;
 }
 
 // dynanmically assigned class for dots to show doping allegation status
@@ -179,17 +237,20 @@ export default {
   fill: $clean-green;
 }
 
+.legend-text {
+  font-size: 0.9rem;
+}
+
 .tooltip {
   align-items: center;
   background: $mouseover;
   border-radius: 15px;
   border-style: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  color: #fff;
+  color:$mouseover-text;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 13px;
   height: 5rem;
-  justify-content: center;
   padding: 0 0.6rem 0 0.6rem;
   position: absolute;
   text-align: left;
@@ -210,5 +271,4 @@ export default {
   height: 3rem;
   width: 11rem;
 }
-
 </style>
