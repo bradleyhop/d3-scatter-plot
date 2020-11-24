@@ -15,7 +15,7 @@ export default {
       // array of objects for the graph legend
       legend: [
         {
-          Text: 'Aleged Doping',
+          Text: 'Alleged Doping',
           Doping: 'Yes',
         },
         {
@@ -258,14 +258,14 @@ export default {
   border-radius: 15px;
   border-style: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  color:$mouseover-text;
+  color: $mouseover-text;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 13px;
   height: 5rem;
   padding: 0 0.6rem 0 0.6rem;
+  position: absolute;
   text-align: left;
   width: 14rem;
-  position: absolute;
 
   & .name {
     font-weight: bold;
