@@ -15,21 +15,23 @@ export default {
     <div class="footer-copy">
       <a
         href="https://github.com/bradleyhop/"
-        rel="noopener"
+        rel="noopener noreferer"
         target="_blank"
         class="footer-link"
       >
         Bradley Smith
       </a>
         &#169;{{ currentYear }}
+        [&nbsp;
       <a
         href="https://github.com/bradleyhop/d3-scatter-plot"
-        rel="noopener"
+        rel="noopener noreferer"
         target="_blank"
         class="footer-link"
       >
-        [ Project GitHub ]
+        Project GitHub
       </a>
+        &nbsp;]
     </div>
   </div>
 </template>
