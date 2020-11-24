@@ -10,10 +10,9 @@ export default {
       widthChart: 1000, // width of #scatter-plot svg
       heightChart: 500, // height of #scatter-plot svg
       padding: 60, // padding of chart
-      legendWidth: 150, // width of #legend svg
       legendHeight: 60, // height of #legend svg
       // array of objects for the graph legend
-      legend: [
+      legendData: [
         {
           Text: 'Alleged Doping',
           Doping: 'Yes',
@@ -55,12 +54,6 @@ export default {
         .attr('width', this.widthChart)
         .attr('height', this.heightChart);
 
-      // choose element for legend svg
-      const legendSvg = d3.select('#legend')
-        .append('svg')
-        .attr('width', this.widthChart)
-        .attr('height', this.legendHeight);
-
       // setup x-axis (year)
       const xScale = d3.scaleLinear()
         // minus and plus one year to give padding for the data
@@ -91,6 +84,12 @@ export default {
       // functional declaration for drawing y-axis with label in minutes:seconds format
       const yAxis = d3.axisLeft(yScale)
         .tickFormat(d3.timeFormat('%M:%S'));
+
+      // group legend elements together
+      const legendG = svg.append('g')
+        .attr('id', 'legend') // project requirement
+        .attr('transform', `translate(${this.widthChart - this.padding - 200},
+          ${this.padding - 30} )`);
 
       // function declaration for tooltip div element
       const divTool = d3.select('#scatter-plot')
@@ -145,12 +144,33 @@ export default {
             .style('display', 'none');
         });
 
+      // one dot for each label in the legend
+      legendG.selectAll('rect')
+        .data(this.legendData)
+        .enter()
+        .append('rect')
+        .attr('x', 105) // color squares are to the left of text
+        .attr('y', (d, i) => i * 21) // multiple to set each dot lower than prev
+        .attr('height', 12)
+        .attr('width', 12)
+        .attr('class', (d) => (d.Doping ? 'doped' : 'not-doped'));
+
+      // text labels for legend
+      legendG.selectAll('text')
+        .data(this.legendData)
+        .enter()
+        .append('text')
+        .attr('x', 0)
+        .attr('y', (d, i) => 10 + (i * 22))
+        .text((d) => d.Text)
+        .attr('class', 'legend-text');
+
       // x-axis label
       svg.append('text')
         .attr('class', 'axis-label')
         .attr('text-anchor', 'end')
-        .attr('x', this.widthChart / 2)
-        .attr('y', this.heightChart - 22)
+        .attr('x', this.widthChart / 2) // center ;)
+        .attr('y', this.heightChart - 22) // pushes text down
         .text('Year');
 
       // y-axis label
@@ -158,30 +178,9 @@ export default {
         .attr('class', 'axis-label')
         .attr('text-anchor', 'end')
         .attr('y', 10) // pushes text to the right
-        .attr('x', -130) // pushes text down
+        .attr('x', -150) // pushes text down
         .attr('transform', 'rotate(-90)') // vertical text
         .text('Time Completed (Minutes:Seconds)');
-
-      // one dot for each label in the legend
-      legendSvg.selectAll('legendDots')
-        .data(this.legend)
-        .enter()
-        .append('rect')
-        .attr('x', this.widthChart - 40) // color squares are to the left of text
-        .attr('y', (d, i) => i * 22) // multiple to set each dot lower than prev
-        .attr('height', 12)
-        .attr('width', 12)
-        .attr('class', (d) => (d.Doping ? 'doped' : 'not-doped'));
-
-      // text labels for legend
-      legendSvg.selectAll('legendText')
-        .data(this.legend)
-        .enter()
-        .append('text')
-        .attr('x', this.widthChart - 145)
-        .attr('y', (d, i) => 10 + (i * 22))
-        .text((d) => d.Text)
-        .attr('class', 'legend-text');
     },
 
   },
@@ -220,12 +219,6 @@ export default {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   margin-bottom: 0;
   padding-top: 1rem;
-}
-
-// hacky way of getting the legend to sit on top of the graph
-.legend {
-  position: absolute;
-  top: 12rem;
 }
 
 // axis markers
