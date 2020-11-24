@@ -178,7 +178,7 @@ export default {
         .data(this.legend)
         .enter()
         .append('text')
-        .attr('x', this.widthChart - 140)
+        .attr('x', this.widthChart - 145)
         .attr('y', (d, i) => 10 + (i * 22))
         .text((d) => d.Text)
         .attr('class', 'legend-text');
