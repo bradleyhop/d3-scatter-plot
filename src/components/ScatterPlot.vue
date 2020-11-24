@@ -7,13 +7,15 @@ export default {
   data() {
     return {
       cycleData: undefined, // placeholder for fetch'ed cyclist data
-      widthChart: 1000, // width of svg area
-      heightChart: 500, // height of svg area
+      widthChart: 1000, // width of #scatter-plot svg
+      heightChart: 500, // height of #scatter-plot svg
       padding: 60, // padding of chart
-      // arry of objects for the grpah legend
+      legendWidth: 150, // width of #legend svg
+      legendHeight: 60, // height of #legend svg
+      // array of objects for the graph legend
       legend: [
         {
-          Text: 'Alled Doping',
+          Text: 'Aleged Doping',
           Doping: 'Yes',
         },
         {
@@ -47,11 +49,17 @@ export default {
   methods: {
     // called by mounted() after async data is successfully fetch'ed
     graphInit() {
-      // choose element to draw our svg element
+      // choose element to draw our svg
       const svg = d3.select('#scatter-plot')
         .append('svg')
         .attr('width', this.widthChart)
         .attr('height', this.heightChart);
+
+      // choose element for legend svg
+      const legendSvg = d3.select('#legend')
+        .append('svg')
+        .attr('width', this.widthChart)
+        .attr('height', this.legendHeight);
 
       // setup x-axis (year)
       const xScale = d3.scaleLinear()
@@ -127,8 +135,9 @@ export default {
             </p>`)
             .style('opacity', '1')
             .style('display', 'flex') // to align items centrally
-            .style('top', `${event.pageY - 30}px`)
-            .style('left', `${event.pageX + 12}px`);
+            // funky offsets here because of setting .scatter-plot to display: relative;
+            .style('top', `${event.pageY - 25}px`)
+            .style('left', `${event.pageX + 10}px`);
         })
         .on('mouseout', () => {
           divTool
@@ -154,32 +163,25 @@ export default {
         .text('Time Completed (Minutes:Seconds)');
 
       // one dot for each label in the legend
-      const legendDots = svg.selectAll('legendDots')
+      legendSvg.selectAll('legendDots')
         .data(this.legend)
         .enter()
         .append('rect')
-        .attr('x', this.widthChart - this.padding - 7) // color squares are to the left of text
-        .attr('y', (d, i) => 90 + (i * 25)) // multiple to set each dot lower than prev
+        .attr('x', this.widthChart - 40) // color squares are to the left of text
+        .attr('y', (d, i) => i * 22) // multiple to set each dot lower than prev
         .attr('height', 12)
         .attr('width', 12)
         .attr('class', (d) => (d.Doping ? 'doped' : 'not-doped'));
 
       // text labels for legend
-      const legendText = svg.selectAll('legendText')
+      legendSvg.selectAll('legendText')
         .data(this.legend)
         .enter()
         .append('text')
-        .attr('x', this.widthChart - this.padding - 100)
-        .attr('y', (d, i) => 100 + (i * 25))
+        .attr('x', this.widthChart - 140)
+        .attr('y', (d, i) => 10 + (i * 22))
         .text((d) => d.Text)
         .attr('class', 'legend-text');
-
-      // not sure if this is how to implement the #legend legend?
-      svg.append('g')
-        .attr('transform', 'translate(0, 0)')
-        .attr('id', 'legend') // requirement for project
-        .call(legendDots)
-        .call(legendText);
     },
 
   },
@@ -192,6 +194,9 @@ export default {
       Thirty-Five Fastest Times Up Alpe d'Huez
     </h2>
     <div id="scatter-plot" class="scatter-plot">
+    </div>
+    <!-- id requirement for project -->
+    <div id="legend" class="legend">
     </div>
   </div>
 </template>
@@ -217,7 +222,13 @@ export default {
   padding-top: 1rem;
 }
 
-// axises
+// hacky way of getting the legend to sit on top of the graph
+.legend {
+  position: absolute;
+  top: 12rem;
+}
+
+// axis markers
 .tick {
   color: $text-gray;
 }
@@ -227,12 +238,12 @@ export default {
   font-style: italic;
 }
 
-// dynanmically assigned class for dots to show doping allegation status
+// dynamically assigned class for dots to show doping allegation status
 .doped {
   fill: $guilty-red;
 }
 
-// dynanmically assigned class for dots to show doping allegation status
+// dynamically assigned class for dots to show doping allegation status
 .not-doped {
   fill: $clean-green;
 }
@@ -252,9 +263,9 @@ export default {
   font-size: 13px;
   height: 5rem;
   padding: 0 0.6rem 0 0.6rem;
-  position: absolute;
   text-align: left;
   width: 14rem;
+  position: absolute;
 
   & .name {
     font-weight: bold;
