@@ -6,6 +6,9 @@ export default {
 
   data() {
     return {
+      // api provided by freeCodeCamp
+      dataURL:
+        'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json',
       cycleData: undefined, // placeholder for fetch'ed cyclist data
       widthChart: 1000, // width of #scatter-plot svg
       heightChart: 500, // height of #scatter-plot svg
@@ -27,7 +30,7 @@ export default {
 
   mounted() {
     // fetch data provide by freeCodeCamp api
-    fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json')
+    fetch(this.dataURL)
       .then((response) => response.json())
       .then((data) => {
         // store obj within vue
@@ -234,11 +237,13 @@ export default {
 // dynamically assigned class for dots to show doping allegation status
 .doped {
   fill: $guilty-red;
+  opacity: 0.9;
 }
 
 // dynamically assigned class for dots to show doping allegation status
 .not-doped {
   fill: $clean-green;
+  opacity: 0.9;
 }
 
 .legend-text {
