@@ -13,7 +13,6 @@ export default {
       widthChart: 1000, // width of #scatter-plot svg
       heightChart: 500, // height of #scatter-plot svg
       padding: 60, // padding of chart
-      legendHeight: 60, // height of #legend svg
       // array of objects for the graph legend
       legendData: [
         {
@@ -69,7 +68,7 @@ export default {
           this.widthChart - this.padding,
         ]);
 
-      // setup x-axis
+      // setup y-axis
       const yScale = d3.scaleTime()
         .domain([
           d3.min(this.cycleData, (d) => d.DateObj),
@@ -196,9 +195,6 @@ export default {
       Thirty-Five Fastest Times Up Alpe d'Huez
     </h2>
     <div id="scatter-plot" class="scatter-plot">
-    </div>
-    <!-- id requirement for project -->
-    <div id="legend" class="legend">
     </div>
   </div>
 </template>
