@@ -128,7 +128,7 @@ export default {
         .on('mouseover', (event, d) => {
           divTool
             .attr('data-year', d.Year) // project requirement
-            .attr('class', d.Doping ? 'tooltip' : 'tooltip narrow')
+            .attr('class', 'tooltip')
             .html(`<p>
               <span class="name">${d.Name}</span>, ${d.Nationality}<br/>
               Year - ${d.Year}, Time - ${d.Time}<br/>
@@ -223,6 +223,7 @@ export default {
 // axis markers
 .tick {
   color: $text-gray;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
 }
 
 .axis-label {
@@ -255,11 +256,9 @@ export default {
   color: $mouseover-text;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 13px;
-  height: 5rem;
-  padding: 0 0.6rem 0 0.6rem;
+  padding: 0.6rem;
   position: absolute;
   text-align: left;
-  width: 14rem;
 
   & .name {
     font-weight: bold;
@@ -268,12 +267,5 @@ export default {
   & .doping-text {
     font-style: italic;
   }
-}
-
-.narrow {
-  @extend .tooltip;
-
-  height: 3rem;
-  width: 11rem;
 }
 </style>
