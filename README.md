@@ -29,8 +29,8 @@ Another hangup I had was not paying attention to method inputs.
 
 ```javascript
 d3.domain(d3.extent()) // works because .extent() returns an array
-d3.domain(d3.min(), d3.max()) // doesn't because min and max only returns values
-d3.domain([d3.min(), d3.max()]) // works because now the returned values are in an array
+d3.domain(d3.min(), d3.max()) // doesn't because min and max only returns numbers
+d3.domain([d3.min(), d3.max()]) // works because now the returned numbers are in an array
 ```
 
 This error only took me a couple of days to catch. Blarg. (I worked on other parts
