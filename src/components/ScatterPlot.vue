@@ -13,7 +13,7 @@ export default {
       widthChart: 1000, // width of #scatter-plot svg
       heightChart: 500, // height of #scatter-plot svg
       padding: 60, // padding of chart
-      // array of objects for the graph legend
+      // array of objects for the graph legend text
       legendData: [
         {
           Text: 'Alleged Doping',
@@ -32,8 +32,8 @@ export default {
     fetch(this.dataURL)
       .then((response) => response.json())
       .then((data) => {
-        // store obj within vue
-        this.cycleData = data;
+        // store obj within vue; make non-reactive since it won't change: speedup
+        this.cycleData = Object.freeze(data);
 
         // add DateObj key:property to represent Seconds as Date() object for d3 time formatting
         this.cycleData.forEach((obj) => (
@@ -111,7 +111,7 @@ export default {
         .attr('id', 'y-axis') // project requirement
         .call(yAxis);
 
-      // draw data points as dots with tooltip popup on mouseover
+      // draw data points as dots with tooltip pop-up on mouseover
       svg.selectAll('circle')
         .data(this.cycleData)
         .enter()
