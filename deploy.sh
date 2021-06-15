@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#/usr/bin/env sh
 
 # abort on errors
 set -e
@@ -20,6 +20,6 @@ git commit -m 'deploy'
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:bradleyhop/d3-scatterplot-build.git master:gh-pages
+git push -f git@github.com:bradleyhop/d3-scatterplot-build.git main:gh-pages
 
 cd -
