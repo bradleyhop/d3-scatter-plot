@@ -1,5 +1,7 @@
 # d3-scatter-plot
 
+[live demo](https://bradleyhop.github.io/d3-scatterplot-build/)
+
 Data Visualization Project for freeCodeCamp.org Data Visualization Project:
 Scatter Plot Graph using Vue & D3.
 

@@ -39,6 +39,10 @@ export default {
   }
 }
 
+html {
+  background-color: #fff;
+}
+
 #app {
   color: $text-gray;
   display: flex; // boilerplate to keep footer down below
